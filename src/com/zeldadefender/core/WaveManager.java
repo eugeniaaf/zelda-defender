@@ -12,7 +12,6 @@ import java.util.List;
 public class WaveManager
 {
     private float timeSinceLastSpawn, spawnTime;
-    private int waveNumber;
     private List<Enemy> enemyType;
     private List<Wave> waveList;
     private Wave currentWave;
@@ -22,7 +21,6 @@ public class WaveManager
         this.enemyType = enemyType;
         this.spawnTime = spawnTime;
         this.timeSinceLastSpawn = 0;
-        this.waveNumber = 0;
         this.currentWave = null;
         this.waveList = new ArrayList<>();
     }
@@ -69,7 +67,6 @@ public class WaveManager
     {
         currentWave = new Wave(enemyType);
         waveList.add(currentWave);
-        waveNumber++;
     }
 
     public List<Wave> getWaveList()

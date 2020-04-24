@@ -2,10 +2,7 @@ package com.zeldadefender.view;
 
 import com.zeldadefender.core.Constant;
 import com.zeldadefender.core.ImageParser;
-import com.zeldadefender.model.Enemy;
-import com.zeldadefender.model.Game;
-import com.zeldadefender.model.Tower;
-import com.zeldadefender.model.Wave;
+import com.zeldadefender.core.Game;
 import com.zeldadefender.view.core.*;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -14,16 +11,12 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
-
-import static com.zeldadefender.view.core.Artist.*;
 
 public class GameWindow
 {
