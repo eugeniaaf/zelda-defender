@@ -10,37 +10,34 @@ import static com.zeldadefender.view.core.Clock.*;
 
 public class Wave
 {
-    private float timeSinceLastSpawn, spawnTime;
     private List<Enemy> enemyType;
     private List<Enemy> enemyList;
+    private boolean waveCompleted;
 
-    public Wave(float spawnTime, List<Enemy> enemyType)
+    public Wave(List<Enemy> enemyType)
     {
-        this.spawnTime = spawnTime;
         this.enemyType = enemyType;
-
-        timeSinceLastSpawn = 0;
+        this.waveCompleted = false;
         enemyList = new ArrayList<>();
+        spawn();
     }
 
     public void update()
     {
-        timeSinceLastSpawn += delta();
-
-        if (timeSinceLastSpawn > spawnTime)
-        {
-            spawn();
-            timeSinceLastSpawn = 0;
-        }
+        boolean allEnemiesDead = true;
 
         for (Enemy enemy: enemyList)
         {
             if (enemy.isAlive())
             {
+                allEnemiesDead = false;
                 enemy.update();
                 enemy.draw();
             }
         }
+
+        if (allEnemiesDead)
+            waveCompleted = true;
     }
 
     private void spawn()
@@ -49,5 +46,10 @@ public class Wave
         {
             enemyList.add(new Enemy(enemy.getTexture(), enemy.getStartTile(), enemy.getTileGrid(), Constant.TILE_WIDTH, Constant.TILE_HEIGHT, enemy.getSpeed()));
         }
+    }
+
+    public boolean isWaveCompleted()
+    {
+        return waveCompleted;
     }
 }

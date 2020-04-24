@@ -3,6 +3,7 @@ package com.zeldadefender.view;
 import com.zeldadefender.core.Constant;
 import com.zeldadefender.core.ImageParser;
 import com.zeldadefender.model.Enemy;
+import com.zeldadefender.model.Game;
 import com.zeldadefender.model.Tower;
 import com.zeldadefender.model.Wave;
 import com.zeldadefender.view.core.*;
@@ -130,28 +131,8 @@ public class GameWindow
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        TileGrid tileGrid = new TileGrid(Constant.GAME_BOARD);
-        List<Enemy> topEnemies = new ArrayList<>();
 
-        Tower tower = new Tower(quickLoad("tower"), tileGrid.getTile(0, 0), 48, 32, 10);
-        for (int i = 0; i < 3; i++)
-        {
-            int y = 8 - i;
-
-            Enemy enemy = new Enemy(quickLoad("enemy"), tileGrid.getTile(i, y), tileGrid, Constant.TILE_WIDTH, Constant.TILE_HEIGHT, 3);
-            topEnemies.add(enemy);
-        }
-        List<Enemy> downEnemies = new ArrayList<>();
-        for (int i = 0; i < 3; i++)
-        {
-            int y = 28 + i;
-
-            Enemy enemy = new Enemy(quickLoad("enemy"), tileGrid.getTile(i, y), tileGrid, Constant.TILE_WIDTH, Constant.TILE_HEIGHT, 3);
-            downEnemies.add(enemy);
-        }
-
-        Wave topWave = new Wave(150, topEnemies);
-        Wave downWave = new Wave(150, downEnemies);
+        Game game = new Game(Constant.GAME_BOARD);
 
         // Rendering loop until the user has attempted to close the window
         // or pressed the ESCAPE key.
@@ -161,11 +142,7 @@ public class GameWindow
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the framebuffer.
 
             Clock.update();
-
-            tileGrid.draw();
-            topWave.update();
-            downWave.update();
-            tower.draw();
+            game.update();
 
             glfwSwapBuffers(window); // Swap the colors buffers.
         }

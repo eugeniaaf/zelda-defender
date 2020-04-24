@@ -35,7 +35,7 @@ public class Tower
     private void shoot()
     {
         timeSinceLastShot = 0;
-        projectiles.add(new Projectile(quickLoad("projectile"), x + 15, y + 16, 5, 10));
+        projectiles.add(new Projectile(quickLoad("projectile"), x + (width / 2), y + (height / 2), 12, 10));
     }
 
     public void update()
@@ -45,6 +45,13 @@ public class Tower
         {
             shoot();
         }
+
+        for (Projectile projectile: projectiles)
+        {
+            projectile.update();
+        }
+
+        draw();
     }
 
     public void draw()
