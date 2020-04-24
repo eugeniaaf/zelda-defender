@@ -52,4 +52,9 @@ public class Wave
     {
         return waveCompleted;
     }
+
+    public List<Enemy> getEnemyList()
+    {
+        return enemyList;
+    }
 }

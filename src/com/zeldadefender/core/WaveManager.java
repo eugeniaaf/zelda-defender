@@ -6,6 +6,7 @@ import com.zeldadefender.model.Wave;
 import static com.zeldadefender.view.core.Clock.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class WaveManager
@@ -28,6 +29,7 @@ public class WaveManager
 
     public void update()
     {
+        Wave waveCompleted = null;
         timeSinceLastSpawn += delta();
 
         if (timeSinceLastSpawn > spawnTime)
@@ -43,8 +45,22 @@ public class WaveManager
                 wave.update();
             } else
             {
-                System.out.println("Wave is over!");
-                waveList.remove(wave);
+                waveCompleted = wave;
+            }
+        }
+
+        if (null != waveCompleted)
+        {
+            Iterator i = waveList.iterator();
+            Wave nextWave = null;
+            while(i.hasNext())
+            {
+                nextWave = (Wave) i.next();
+                if (nextWave.equals(waveCompleted))
+                {
+                    i.remove();
+                    break;
+                }
             }
         }
     }
@@ -54,5 +70,10 @@ public class WaveManager
         currentWave = new Wave(enemyType);
         waveList.add(currentWave);
         waveNumber++;
+    }
+
+    public List<Wave> getWaveList()
+    {
+        return waveList;
     }
 }
