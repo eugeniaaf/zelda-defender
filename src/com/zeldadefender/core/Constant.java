@@ -8,6 +8,22 @@ public class Constant
     public static final int TILE_WIDTH = 16;
     public static final int TILE_HEIGHT = 16;
 
+    // tower
+    public static final int TOWER_MIN_DAMAGE = 20;
+    public static final int TOWER_MAX_DAMAGE = 80;
+
+    // ally
+    public static final int ALLY_LIFE = 250;
+    public static final int ALLY_MIN_DAMAGE = 1;
+    public static final int ALLY_MAX_DAMAGE = 4;
+    public static final int ALLY_RESPAWN_TIME = 50;
+
+    // enemy
+    public static final int ENEMY_LIFE = 350;
+    public static final int ENEMY_MIN_DAMAGE = 2;
+    public static final int ENEMY_MAX_DAMAGE = 7;
+
+
     public static final int[][] GAME_BOARD = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},

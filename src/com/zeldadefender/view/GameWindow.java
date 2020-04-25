@@ -125,7 +125,8 @@ public class GameWindow
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        Game game = new Game(Constant.GAME_BOARD);
+//        Game game = new Game(Constant.GAME_BOARD);
+        Game game = Game.getInstance();
 
         // Rendering loop until the user has attempted to close the window
         // or pressed the ESCAPE key.

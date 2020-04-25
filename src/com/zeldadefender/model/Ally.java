@@ -1,60 +1,129 @@
 package com.zeldadefender.model;
 
-import com.zeldadefender.core.Constant;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+import com.zeldadefender.core.*;
 import com.zeldadefender.view.core.Texture;
 import com.zeldadefender.view.core.Tile;
 import com.zeldadefender.view.core.TileGrid;
+import jade.core.Agent;
+import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 import static com.zeldadefender.view.core.Artist.drawQuadTex;
 import static com.zeldadefender.view.core.Artist.quickLoad;
 import static com.zeldadefender.view.core.Clock.delta;
 
-public class Ally
+public class Ally extends Agent
 {
     private Texture texture;
     private Tile startTile;
     private TileGrid tileGrid;
-    private int width, height, health, changeSprite = 0, damage;
+    private int width, height, life, changeSprite = 0;
     private float speed, x, y;
-    private boolean first = true, alive = true;
+    private boolean first = true, alive = true, attacking = false;
+    private Enemy target;
 
-    public Ally(Texture texture, Tile startTile, TileGrid tileGrid, int width, int height, int damage)
+    public Ally(Texture texture, Tile startTile, TileGrid tileGrid, int width, int height)
     {
         this.texture = texture;
         this.x = startTile.getX();
         this.y = startTile.getY();
         this.width = width;
         this.height = height;
-        this.speed = speed;
         this.startTile = startTile;
         this.tileGrid = tileGrid;
-        this.damage = damage;
+        this.life = Constant.ALLY_LIFE;
     }
 
     public void update()
     {
-        draw();
+        if (changeSprite < 12)
+        {
+            if (attacking) this.texture = quickLoad("ally");
+        } else
+        {
+            if (attacking)
+            {
+                this.texture = quickLoad("ally_attack");
+                attack();
+            }
+            if (changeSprite > 24) changeSprite = 0;
+        }
+
         if (first)
         {
             first = false;
         } else
         {
-//            changeSprite++;
+            if (alive)
+            {
+                draw();
+                if (attacking)
+                {
+                    changeSprite++;
+                } else
+                {
+                    this.texture = quickLoad("ally");
+                }
+            }
         }
     }
 
-    private void checkTile()
+    public void setAttacking(boolean attacking)
     {
+        this.attacking = attacking;
     }
 
     private void die()
     {
-        alive = false;
+        List<AllyManager> allyManagers = Game.getInstance().getAllyManagers();
+
+        Iterator i = allyManagers.iterator();
+        AllyManager nextAllyManager = null;
+        while (i.hasNext())
+        {
+            nextAllyManager = (AllyManager) i.next();
+            if (nextAllyManager.getAlly().equals(this))
+            {
+                alive = false;
+                if (null != this.target)
+                {
+                    this.target.setAttacking(false);
+                    this.target.setTarget(null);
+                }
+                i.remove();
+                break;
+            }
+        }
     }
 
     public void draw()
     {
         drawQuadTex(texture, x, y, width, height);
+    }
+
+    public void attack()
+    {
+        if (null == this.target || !this.target.isAlive())
+        {
+            this.attacking = false;
+            return;
+        }
+
+        Random randomGenerator = new Random();
+        int damage = randomGenerator.nextInt(Constant.ALLY_MAX_DAMAGE) + Constant.ALLY_MIN_DAMAGE;
+        this.target.setDamage(damage);
+    }
+
+    public void setDamage(int damage)
+    {
+        this.life -= damage;
+        if (this.life <= 0) this.die();
     }
 
     public Texture getTexture()
@@ -87,14 +156,14 @@ public class Ally
         this.height = height;
     }
 
-    public int getHealth()
+    public int getLife()
     {
-        return health;
+        return life;
     }
 
-    public void setHealth(int health)
+    public void setLife(int life)
     {
-        this.health = health;
+        this.life = life;
     }
 
     public int getChangeSprite()
@@ -177,8 +246,13 @@ public class Ally
         this.alive = alive;
     }
 
-    public static Ally copy(Ally ally)
+    public Enemy getTarget()
     {
-        return new Ally(ally.getTexture(), ally.getStartTile(), ally.tileGrid, ally.width, ally.height, ally.damage);
+        return target;
+    }
+
+    public void setTarget(Enemy target)
+    {
+        this.target = target;
     }
 }

@@ -56,7 +56,10 @@ public class Projectile
             x += xVelocity * speed * delta();
             y += yVelocity * speed * delta();
             if (checkCollision(x, y, width, height, target.getX(), target.getY(), target.getWidth(), target.getHeight()))
+            {
+                this.target.setDamage(damage);
                 alive = false;
+            }
 
             draw();
         }

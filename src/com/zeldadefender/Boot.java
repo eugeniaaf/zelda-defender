@@ -1,6 +1,7 @@
 package com.zeldadefender;
 
 import com.zeldadefender.core.Constant;
+import com.zeldadefender.core.ContainerManager;
 import com.zeldadefender.core.ImageParser;
 import com.zeldadefender.view.GameWindow;
 import org.lwjgl.*;
@@ -21,8 +22,8 @@ public class Boot
 
     public Boot()
     {
-        // Initialize Game Window
-        GameWindow.getInstance();
+        // Initialize Container
+        ContainerManager.getInstance();
     }
 
     public static void main(String[] args)

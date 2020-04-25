@@ -1,21 +1,28 @@
 package com.zeldadefender.model;
 
+import com.zeldadefender.core.AllyManager;
 import com.zeldadefender.core.Constant;
+import com.zeldadefender.core.Game;
 import com.zeldadefender.view.core.Texture;
 import com.zeldadefender.view.core.Tile;
 import com.zeldadefender.view.core.TileGrid;
+import sun.management.Agent;
+
+import java.util.List;
+import java.util.Random;
 
 import static com.zeldadefender.view.core.Artist.*;
 import static com.zeldadefender.view.core.Clock.*;
 
-public class Enemy
+public class Enemy extends Agent
 {
     private Texture texture;
     private Tile startTile;
     private TileGrid tileGrid;
-    private int width, height, health, changeSprite = 0, dirX = 1, dirY = 0;
+    private int width, height, life, changeSprite = 0, dirX = 1, dirY = 0;
     private float speed, x, y;
-    private boolean first = true, alive = true;
+    private boolean first = true, alive = true, attacking = false;
+    private Ally target;
 
     public Enemy(Texture texture, Tile startTile, TileGrid tileGrid, int width, int height, float speed)
     {
@@ -27,27 +34,41 @@ public class Enemy
         this.speed = speed;
         this.startTile = startTile;
         this.tileGrid = tileGrid;
+        this.life = Constant.ENEMY_LIFE;
     }
 
     public void update()
     {
         if (changeSprite < 12)
         {
-            if (dirX > 0)
+            if (!this.attacking)
+            {
+                if (dirX > 0)
+                    this.texture = quickLoad("enemy");
+                else if (dirY < 0)
+                    this.texture = quickLoad("enemy_up");
+                else if (dirY > 0)
+                    this.texture = quickLoad("enemy_down");
+            } else
+            {
                 this.texture = quickLoad("enemy");
-            else if (dirY < 0)
-                this.texture = quickLoad("enemy_up");
-            else if (dirY > 0)
-                this.texture = quickLoad("enemy_down");
+            }
 
         } else
         {
-            if (dirX > 0)
-                this.texture = quickLoad("enemy_2");
-            else if (dirY < 0)
-                this.texture = quickLoad("enemy_up_2");
-            else if (dirY > 0)
-                this.texture = quickLoad("enemy_down_2");
+            if (!this.attacking)
+            {
+                if (dirX > 0)
+                    this.texture = quickLoad("enemy_2");
+                else if (dirY < 0)
+                    this.texture = quickLoad("enemy_up_2");
+                else if (dirY > 0)
+                    this.texture = quickLoad("enemy_down_2");
+            } else
+            {
+                attack();
+                this.texture = quickLoad("enemy_attack");
+            }
             if (changeSprite > 24) changeSprite = 0;
         }
 
@@ -56,11 +77,15 @@ public class Enemy
             first = false;
         } else
         {
-            if ((int) (x / Constant.TILE_WIDTH) == 49)
+            if ((int) (x / Constant.TILE_WIDTH) == 49 || this.life <= 0)
                 die();
 
-            x += delta() * speed * dirX;
-            y += delta() * speed * dirY;
+            if (!this.attacking)
+            {
+                x += delta() * speed * dirX;
+                y += delta() * speed * dirY;
+                checkNextTile();
+            }
             changeSprite++;
         }
 
@@ -73,7 +98,6 @@ public class Enemy
         int startY = (int) (startTile.getY() / Constant.TILE_HEIGHT);
         int currentX = (int) (x / Constant.TILE_WIDTH);
         int currentY = (int) (y / Constant.TILE_HEIGHT);
-
 
         if (currentX == startX + 29 && currentY == startY)
         {
@@ -91,14 +115,59 @@ public class Enemy
         }
     }
 
+    private void checkNextTile()
+    {
+        int currentY = (int) (y / Constant.TILE_HEIGHT);
+        int nextX = (int) (x / Constant.TILE_WIDTH);
+
+        List<AllyManager> allyManagers =  Game.getInstance().getAllyManagers();
+        for (AllyManager allyManager: allyManagers)
+        {
+            int allyX = (int) (allyManager.getAlly().getX() / Constant.TILE_WIDTH);
+            int allyY = (int) (allyManager.getAlly().getY() / Constant.TILE_HEIGHT);
+            if (nextX == allyX && currentY == allyY)
+            {
+                this.target = allyManager.getAlly();
+                target.setAttacking(true);
+                target.setTarget(this);
+                this.attacking = true;
+                this.changeSprite = 0;
+            }
+        }
+    }
+
     private void die()
     {
         alive = false;
+        if (null != target)
+        {
+            this.target.setAttacking(false);
+            this.target.setTarget(null);
+        }
     }
 
     public void draw()
     {
         drawQuadTex(texture, x, y, width, height);
+    }
+
+    public void attack()
+    {
+        if (null == this.target || !this.target.isAlive())
+        {
+            this.attacking = false;
+            return;
+        }
+
+        Random randomGenerator = new Random();
+        int damage = randomGenerator.nextInt(Constant.ENEMY_MAX_DAMAGE) + Constant.ENEMY_MIN_DAMAGE;
+        this.target.setDamage(damage);
+    }
+
+    public void setDamage(int damage)
+    {
+        this.life -= damage;
+        if (this.life <= 0) alive = false;
     }
 
     public Texture getTexture()
@@ -131,14 +200,54 @@ public class Enemy
         this.height = height;
     }
 
-    public int getHealth()
+    public int getLife()
     {
-        return health;
+        return life;
     }
 
-    public void setHealth(int health)
+    public void setLife(int life)
     {
-        this.health = health;
+        this.life = life;
+    }
+
+    public int getDirX()
+    {
+        return dirX;
+    }
+
+    public void setDirX(int dirX)
+    {
+        this.dirX = dirX;
+    }
+
+    public int getDirY()
+    {
+        return dirY;
+    }
+
+    public void setDirY(int dirY)
+    {
+        this.dirY = dirY;
+    }
+
+    public boolean isAttacking()
+    {
+        return attacking;
+    }
+
+    public void setAttacking(boolean attacking)
+    {
+        this.attacking = attacking;
+    }
+
+    public Ally getTarget()
+    {
+        return target;
+    }
+
+    public void setTarget(Ally target)
+    {
+        this.target = target;
     }
 
     public int getChangeSprite()

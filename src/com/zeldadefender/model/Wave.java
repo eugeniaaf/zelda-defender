@@ -44,7 +44,7 @@ public class Wave
     {
         for (Enemy enemy: enemyType)
         {
-            enemyList.add(new Enemy(enemy.getTexture(), enemy.getStartTile(), enemy.getTileGrid(), Constant.TILE_WIDTH, Constant.TILE_HEIGHT, enemy.getSpeed()));
+            enemyList.add(new Enemy(enemy.getTexture(), enemy.getStartTile(), enemy.getTileGrid(), 32, Constant.TILE_HEIGHT, enemy.getSpeed()));
         }
     }
 
