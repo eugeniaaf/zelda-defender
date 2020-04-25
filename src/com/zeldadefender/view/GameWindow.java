@@ -2,7 +2,7 @@ package com.zeldadefender.view;
 
 import com.zeldadefender.core.Constant;
 import com.zeldadefender.core.ImageParser;
-import com.zeldadefender.core.Game;
+import com.zeldadefender.core.GameManager;
 import com.zeldadefender.view.core.*;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -20,21 +20,12 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class GameWindow
 {
-    private static GameWindow instance = null;
     private long window;
     private final ImageParser imageParser = ImageParser.loadImage("src/com/zeldadefender/resources/images/icon.png");
 
     public GameWindow()
     {
         initialize();
-    }
-
-    public static GameWindow getInstance()
-    {
-        if (null == instance)
-            instance = new GameWindow();
-
-        return instance;
     }
 
     public void initialize()
@@ -125,8 +116,7 @@ public class GameWindow
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-//        Game game = new Game(Constant.GAME_BOARD);
-        Game game = Game.getInstance();
+        GameManager.init();
 
         // Rendering loop until the user has attempted to close the window
         // or pressed the ESCAPE key.
@@ -134,9 +124,11 @@ public class GameWindow
         {
             glfwPollEvents(); // Pool for window events.
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the framebuffer.
-
-            Clock.update();
-            game.update();
+//            Clock.update();
+            if (GameManager.isGameStarted())
+            {
+                GameManager.update();
+            }
 
             glfwSwapBuffers(window); // Swap the colors buffers.
         }

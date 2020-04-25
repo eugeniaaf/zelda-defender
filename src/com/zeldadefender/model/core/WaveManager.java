@@ -1,4 +1,4 @@
-package com.zeldadefender.core;
+package com.zeldadefender.model.core;
 
 import com.zeldadefender.model.Enemy;
 import com.zeldadefender.model.Wave;

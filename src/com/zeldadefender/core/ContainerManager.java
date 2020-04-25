@@ -39,10 +39,6 @@ public class ContainerManager
         profile.setParameter(Profile.GUI, "true");
 
         containerController = runtime.createMainContainer(profile);
-
-
-        // Initialize Game Window
-        GameWindow.getInstance();
     }
 
     public AgentController instantiateAgent(String name, String className, Object[] args) throws StaleProxyException

@@ -1,10 +1,9 @@
 package com.zeldadefender.model;
 
 import com.zeldadefender.core.Constant;
-import com.zeldadefender.core.WaveManager;
+import com.zeldadefender.model.core.WaveManager;
 import com.zeldadefender.view.core.Texture;
 import com.zeldadefender.view.core.Tile;
-import jade.core.Agent;
 
 import java.util.ArrayList;
 import java.util.List;

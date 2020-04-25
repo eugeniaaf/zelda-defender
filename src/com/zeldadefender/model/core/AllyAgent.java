@@ -1,24 +1,20 @@
-package com.zeldadefender.model;
+package com.zeldadefender.model.core;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import com.zeldadefender.core.*;
+import com.zeldadefender.model.Enemy;
 import com.zeldadefender.view.core.Texture;
 import com.zeldadefender.view.core.Tile;
 import com.zeldadefender.view.core.TileGrid;
 import jade.core.Agent;
-import jade.wrapper.AgentController;
-import jade.wrapper.StaleProxyException;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import static com.zeldadefender.view.core.Artist.drawQuadTex;
 import static com.zeldadefender.view.core.Artist.quickLoad;
-import static com.zeldadefender.view.core.Clock.delta;
 
-public class Ally extends Agent
+public class AllyAgent extends Agent
 {
     private Texture texture;
     private Tile startTile;
@@ -28,17 +24,23 @@ public class Ally extends Agent
     private boolean first = true, alive = true, attacking = false;
     private Enemy target;
 
-    public Ally(Texture texture, Tile startTile, TileGrid tileGrid, int width, int height)
+    @Override
+    protected void setup()
     {
-        this.texture = texture;
-        this.x = startTile.getX();
-        this.y = startTile.getY();
-        this.width = width;
-        this.height = height;
-        this.startTile = startTile;
-        this.tileGrid = tileGrid;
-        this.life = Constant.ALLY_LIFE;
+        System.out.println("Hello");
     }
+
+//    public Ally(Texture texture, Tile startTile, TileGrid tileGrid, int width, int height)
+//    {
+//        this.texture = texture;
+//        this.x = startTile.getX();
+//        this.y = startTile.getY();
+//        this.width = width;
+//        this.height = height;
+//        this.startTile = startTile;
+//        this.tileGrid = tileGrid;
+//        this.life = Constant.ALLY_LIFE;
+//    }
 
     public void update()
     {
@@ -81,25 +83,25 @@ public class Ally extends Agent
 
     private void die()
     {
-        List<AllyManager> allyManagers = Game.getInstance().getAllyManagers();
-
-        Iterator i = allyManagers.iterator();
-        AllyManager nextAllyManager = null;
-        while (i.hasNext())
-        {
-            nextAllyManager = (AllyManager) i.next();
-            if (nextAllyManager.getAlly().equals(this))
-            {
-                alive = false;
-                if (null != this.target)
-                {
-                    this.target.setAttacking(false);
-                    this.target.setTarget(null);
-                }
-                i.remove();
-                break;
-            }
-        }
+//        List<AllyManager> allyManagers = GameManager.getInstance().getAllyManagers();
+//
+//        Iterator i = allyManagers.iterator();
+//        AllyManager nextAllyManager = null;
+//        while (i.hasNext())
+//        {
+//            nextAllyManager = (AllyManager) i.next();
+//            if (nextAllyManager.getAlly().equals(this))
+//            {
+//                alive = false;
+//                if (null != this.target)
+//                {
+//                    this.target.setAttacking(false);
+//                    this.target.setTarget(null);
+//                }
+//                i.remove();
+//                break;
+//            }
+//        }
     }
 
     public void draw()
@@ -122,8 +124,8 @@ public class Ally extends Agent
 
     public void setDamage(int damage)
     {
-        this.life -= damage;
-        if (this.life <= 0) this.die();
+//        this.life -= damage;
+//        if (this.life <= 0) this.die();
     }
 
     public Texture getTexture()

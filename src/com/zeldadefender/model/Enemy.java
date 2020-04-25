@@ -1,14 +1,12 @@
 package com.zeldadefender.model;
 
-import com.zeldadefender.core.AllyManager;
 import com.zeldadefender.core.Constant;
-import com.zeldadefender.core.Game;
+import com.zeldadefender.model.core.AllyAgent;
 import com.zeldadefender.view.core.Texture;
 import com.zeldadefender.view.core.Tile;
 import com.zeldadefender.view.core.TileGrid;
 import sun.management.Agent;
 
-import java.util.List;
 import java.util.Random;
 
 import static com.zeldadefender.view.core.Artist.*;
@@ -22,7 +20,7 @@ public class Enemy extends Agent
     private int width, height, life, changeSprite = 0, dirX = 1, dirY = 0;
     private float speed, x, y;
     private boolean first = true, alive = true, attacking = false;
-    private Ally target;
+    private AllyAgent target;
 
     public Enemy(Texture texture, Tile startTile, TileGrid tileGrid, int width, int height, float speed)
     {
@@ -117,33 +115,33 @@ public class Enemy extends Agent
 
     private void checkNextTile()
     {
-        int currentY = (int) (y / Constant.TILE_HEIGHT);
-        int nextX = (int) (x / Constant.TILE_WIDTH);
-
-        List<AllyManager> allyManagers =  Game.getInstance().getAllyManagers();
-        for (AllyManager allyManager: allyManagers)
-        {
-            int allyX = (int) (allyManager.getAlly().getX() / Constant.TILE_WIDTH);
-            int allyY = (int) (allyManager.getAlly().getY() / Constant.TILE_HEIGHT);
-            if (nextX == allyX && currentY == allyY)
-            {
-                this.target = allyManager.getAlly();
-                target.setAttacking(true);
-                target.setTarget(this);
-                this.attacking = true;
-                this.changeSprite = 0;
-            }
-        }
+//        int currentY = (int) (y / Constant.TILE_HEIGHT);
+//        int nextX = (int) (x / Constant.TILE_WIDTH);
+//
+//        List<AllyManager> allyManagers =  GameManager.getInstance().getAllyManagers();
+//        for (AllyManager allyManager: allyManagers)
+//        {
+//            int allyX = (int) (allyManager.getAlly().getX() / Constant.TILE_WIDTH);
+//            int allyY = (int) (allyManager.getAlly().getY() / Constant.TILE_HEIGHT);
+//            if (nextX == allyX && currentY == allyY)
+//            {
+//                this.target = allyManager.getAlly();
+//                target.setAttacking(true);
+//                target.setTarget(this);
+//                this.attacking = true;
+//                this.changeSprite = 0;
+//            }
+//        }
     }
 
     private void die()
     {
-        alive = false;
-        if (null != target)
-        {
-            this.target.setAttacking(false);
-            this.target.setTarget(null);
-        }
+//        alive = false;
+//        if (null != target)
+//        {
+//            this.target.setAttacking(false);
+//            this.target.setTarget(null);
+//        }
     }
 
     public void draw()
@@ -240,12 +238,12 @@ public class Enemy extends Agent
         this.attacking = attacking;
     }
 
-    public Ally getTarget()
+    public AllyAgent getTarget()
     {
         return target;
     }
 
-    public void setTarget(Ally target)
+    public void setTarget(AllyAgent target)
     {
         this.target = target;
     }
