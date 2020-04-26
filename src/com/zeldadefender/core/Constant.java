@@ -13,6 +13,8 @@ public class Constant
     public static final int TOWER_MAX_DAMAGE = 80;
 
     // ally
+    public static final int ALLY_WIDTH = 32;
+    public static final int ALLY_HEIGHT = 16;
     public static final int ALLY_LIFE = 250;
     public static final int ALLY_MIN_DAMAGE = 1;
     public static final int ALLY_MAX_DAMAGE = 4;

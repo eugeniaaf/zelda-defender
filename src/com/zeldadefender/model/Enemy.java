@@ -1,7 +1,7 @@
 package com.zeldadefender.model;
 
 import com.zeldadefender.core.Constant;
-import com.zeldadefender.model.core.AllyAgent;
+import com.zeldadefender.model.agent.AllyAgent;
 import com.zeldadefender.view.core.Texture;
 import com.zeldadefender.view.core.Tile;
 import com.zeldadefender.view.core.TileGrid;

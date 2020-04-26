@@ -47,7 +47,7 @@ public class GameManager
 //        this.towers = new ArrayList<>();
         allyManagers = new ArrayList<>();
 
-        allyManagers.add(new AllyManager(19, 6));
+        allyManagers.add(new AllyManager(19, 6, "TopAlly"));
 
 //        List<Enemy> topEnemies = new ArrayList<>();
 //        List<Enemy> botEnemies = new ArrayList<>();
@@ -109,10 +109,10 @@ public class GameManager
 //            tower.update();
 //        }
 //
-//        for (AllyManager allyManager: allyManagers)
-//        {
-//            allyManager.update();
-//        }
+        for (AllyManager allyManager: allyManagers)
+        {
+            allyManager.update();
+        }
     }
 
 //    public List<AllyManager> getAllyManagers()

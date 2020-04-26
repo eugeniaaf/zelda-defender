@@ -116,7 +116,7 @@ public class GameWindow
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        GameManager.init();
+        boolean first = true;
 
         // Rendering loop until the user has attempted to close the window
         // or pressed the ESCAPE key.
@@ -124,9 +124,15 @@ public class GameWindow
         {
             glfwPollEvents(); // Pool for window events.
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the framebuffer.
-//            Clock.update();
             if (GameManager.isGameStarted())
             {
+                if (first)
+                {
+                    GameManager.init();
+                    first = false;
+                }
+
+                Clock.update();
                 GameManager.update();
             }
 
